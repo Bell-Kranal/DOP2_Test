@@ -18,13 +18,14 @@ namespace Infrastructure
             _loadingScreen = loadingScreen;
         }
 
-        public async Task  Load(string name) =>
-            await LoadScene(name);
+        public async Task  Load(string name, Action onLoaded = null) =>
+            await LoadScene(name, onLoaded);
 
-        private async Task LoadScene(string sceneName)
+        private async Task LoadScene(string sceneName, Action action = null)
         {
             if (SceneManager.GetActiveScene().name.Equals(sceneName))
             {
+                action?.Invoke();
                 return;
             }
       
@@ -39,6 +40,7 @@ namespace Infrastructure
             _loadingSlider.SetFillAmount(1f);
             _loadingScreen.Hide();
             loadOperation.allowSceneActivation = true;
+            action?.Invoke();
         }
     }
 }

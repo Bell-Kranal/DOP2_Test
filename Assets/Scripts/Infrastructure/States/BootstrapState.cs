@@ -24,8 +24,7 @@ namespace Infrastructure.States
 
         public async void Enter(string sceneName)
         {
-            await _sceneLoader.Load(sceneName);
-            _gameStateMachine.Enter<LoadLevelState>();
+            await _sceneLoader.Load(sceneName, OnLoaded);
         }
 
         public void Exit() { }
@@ -45,5 +44,8 @@ namespace Infrastructure.States
             _diContainer.Bind<IGameFactory>().FromInstance(gameFactory).AsSingle();
             _diContainer.Bind<IPersistantProgressService>().FromInstance(progressService).AsSingle();
         }
+
+        private void OnLoaded() =>
+            _gameStateMachine.Enter<LoadLevelState>();
     }
 }
